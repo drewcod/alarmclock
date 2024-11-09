@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Clock from './Clock';
 import AlarmSetter from './AlarmSetter';
 
 function Alarm() {
@@ -24,6 +25,7 @@ function Alarm() {
 
   return (
     <div>
+      <Clock />
       <AlarmSetter setAlarmTime={setAlarmTime} />
       {isRinging && (
         <div>
