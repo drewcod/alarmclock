@@ -1,36 +1,41 @@
 import React, { useState, useEffect } from 'react';
-import Clock from './Clock';
-import AlarmSetter from './AlarmSetter';
 
 function Alarm() {
-  const [alarmTime, setAlarmTime] = useState(null);
-  const [isRinging, setIsRinging] = useState(false);
+  const [alarmTime, setAlarmTime] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+  const [alarmStatus, setAlarmStatus] = useState(false);
 
   useEffect(() => {
-    const checkAlarm = () => {
-      const currentTime = new Date().toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-      if (alarmTime === currentTime) {
-        setIsRinging(true);
+    const intervalId = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString());
+
+      if (alarmTime && alarmTime === currentTime) {
+        setAlarmStatus(true);
       }
-    };
+    }, 1000);
 
-    const timer = setInterval(checkAlarm, 1000);
-    return () => clearInterval(timer);
-  }, [alarmTime]);
+    return () => clearInterval(intervalId);
+  }, [alarmTime, currentTime]);
 
-  const stopAlarm = () => setIsRinging(false);
+  const handleAlarmTimeChange = (event) => {
+    setAlarmTime(event.target.value);
+  };
+
+  const handleStopAlarm = () => {
+    setAlarmStatus(false);
+  };
 
   return (
     <div>
-      <Clock />
-      <AlarmSetter setAlarmTime={setAlarmTime} />
-      {isRinging && (
+      <h1>Alarm Clock</h1>
+      <input type="time" value={alarmTime} onChange={handleAlarmTimeChange} />
+      <p>Current time: {currentTime}</p>
+      {alarmStatus && (
         <div>
-          <h2>Alarm Ringing!</h2>
-          <button onClick={stopAlarm}>Stop</button>
+          <audio autoPlay>
+            <source src="alarm-sound.mp3" type="audio/mpeg" />
+          </audio>
+          <button onClick={handleStopAlarm}>Stop Alarm</button>
         </div>
       )}
     </div>
