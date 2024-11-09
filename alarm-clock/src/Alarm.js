@@ -50,3 +50,5 @@ function Alarm() {
     </div>
   );
 }
+
+export default Alarm;
