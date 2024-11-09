@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+
 function Alarm() {
   const [alarmTime, setAlarmTime] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
