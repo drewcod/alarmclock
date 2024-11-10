@@ -4,7 +4,7 @@ function Alarm() {
   const [alarmTime, setAlarmTime] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
   const [alarmStatus, setAlarmStatus] = useState(false);
-  const [alarms, setAlarms] = useState([null]);
+  const [alarms, setAlarms] = useState([]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
