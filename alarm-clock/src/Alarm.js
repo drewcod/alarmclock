@@ -4,7 +4,7 @@ function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
   const [isAlarmActive, setIsAlarmActive] = useState(false);
-  //const audioRef = useRef(null);
+  const [alarmTime, setAlarmTime] = useState(""); // state to hold the selected time
   const currentTimeRef = useRef(currentTime);
 
   useEffect(() => {
@@ -15,14 +15,9 @@ function Alarm() {
 
       alarms.forEach(alarm => {
         const alarmTime = alarm.compTime;
-        /*console.log({
-          alarmTime,
-          currentTime: currentTimeRef.current
-        })*/
         if (alarmTime === currentTimeRef.current && !isAlarmActive) {
           setIsAlarmActive(true);
           handleDeleteAlarm(alarm.id);
-          //audioRef.current.play();
         }
       });
     }, 1000);
@@ -31,24 +26,31 @@ function Alarm() {
   }, [alarms, currentTime, isAlarmActive]);
 
   const handleAlarmTimeChange = (event) => {
-    var badTime = event.target.value;
-    var hours = badTime.slice(0, 2);
-    var mins = badTime.slice(3, 5);
-    var AMPM = 'AM';
-    if (hours > 12) {
-      hours = hours - 12;
-      if (hours < 10) {
-        hours = '0' + hours;
+    setAlarmTime(event.target.value); // update the alarmTime state when the user selects a time
+  };
+
+  const handleAddAlarm = () => {
+    if (alarmTime) {
+      var badTime = alarmTime;
+      var hours = badTime.slice(0, 2);
+      var mins = badTime.slice(3, 5);
+      var AMPM = 'AM';
+      if (hours > 12) {
+        hours = hours - 12;
+        if (hours < 10) {
+          hours = '0' + hours;
+        }
+        AMPM = 'PM';
       }
-      AMPM = 'PM';
+      var goodTime = hours + ':' + mins + ':00 ' + AMPM;
+      const newAlarm = {
+        id: Date.now(),
+        time: badTime,
+        compTime: goodTime
+      };
+      setAlarms([...alarms, newAlarm]); // add the new alarm
+      setAlarmTime(""); // reset the selected time after adding the alarm
     }
-    var goodTime = hours + ':' + mins + ':00 ' + AMPM;
-    const newAlarm = {
-      id: Date.now(),
-      time: badTime,
-      compTime: goodTime
-    };
-    setAlarms([...alarms, newAlarm]);
   };
 
   const handleDeleteAlarm = (id) => {
@@ -58,8 +60,6 @@ function Alarm() {
 
   const handleStopAlarm = () => {
     if (isAlarmActive) {
-      /*audioRef.current.pause();
-      audioRef.current.currentTime = 0;*/
       setIsAlarmActive(false);
     }
   };
@@ -73,7 +73,8 @@ function Alarm() {
   return (
     <div>
       <h1>Alarm Clock</h1>
-      <input type="time" onChange={handleAlarmTimeChange} />
+      <input type="time" value={alarmTime} onChange={handleAlarmTimeChange} />
+      <button onClick={handleAddAlarm}>Set Alarm</button>
       <p>Current time: {currentTime}</p>
       <ol>
         {sortedAlarms.map(alarm => (
@@ -90,10 +91,6 @@ function Alarm() {
           <button onClick={handleStopAlarm}>Stop</button>
         </div>
       )}
-
-      {/*<audio ref={audioRef}>
-        <source src="voicemail-13.mp3" type="audio/mpeg" />
-      </audio>*/}
     </div>
   );
 }
