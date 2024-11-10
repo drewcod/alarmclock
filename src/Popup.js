@@ -2,9 +2,16 @@ import React, { useState } from "react";
 
 function Popup({ children, onClose }) {
     const [attempt, setAttempt] = useState("");
-    const [problem, setProblem] = useState('2 + 4 * -1 * (1 / 2) = ')
-    // eslint-disable-next-lineconst 
-    correctAnswer = 0;
+    const[numbers, setNumbers] = useState([]);
+
+    setNumbers(() => {
+      var num1 = Math.random(103, 999);
+      var num2 = Math.random(103, 999);
+      return [num1, num2];
+    });
+
+    const [problem, setProblem] = useState(numbers[0] + ' * ' + numbers[1]);
+    const correctAnswer = numbers[0] * numbers[1];
 
     const handleChange = (e) => {
         setAttempt(e.target.value);
