@@ -4,8 +4,9 @@ function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
   const [isAlarmActive, setIsAlarmActive] = useState(false);
-  const [alarmTime, setAlarmTime] = useState(""); // state to hold the selected time
+  const [alarmTime, setAlarmTime] = useState(""); 
   const currentTimeRef = useRef(currentTime);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -18,6 +19,7 @@ function Alarm() {
         if (alarmTime === currentTimeRef.current && !isAlarmActive) {
           setIsAlarmActive(true);
           handleDeleteAlarm(alarm.id);
+          audioRef.current.play();
         }
       });
     }, 1000);
@@ -26,7 +28,7 @@ function Alarm() {
   }, [alarms, currentTime, isAlarmActive]);
 
   const handleAlarmTimeChange = (event) => {
-    setAlarmTime(event.target.value); // update the alarmTime state when the user selects a time
+    setAlarmTime(event.target.value); 
   };
 
   const handleAddAlarm = () => {
@@ -48,8 +50,8 @@ function Alarm() {
         time: badTime,
         compTime: goodTime
       };
-      setAlarms([...alarms, newAlarm]); // add the new alarm
-      setAlarmTime(""); // reset the selected time after adding the alarm
+      setAlarms([...alarms, newAlarm]);
+      setAlarmTime("");
     }
   };
 
@@ -61,6 +63,8 @@ function Alarm() {
   const handleStopAlarm = () => {
     if (isAlarmActive) {
       setIsAlarmActive(false);
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
   };
 
@@ -91,6 +95,8 @@ function Alarm() {
           <button onClick={handleStopAlarm}>Stop</button>
         </div>
       )}
+
+      <audio ref={audioRef} src="Waldir Calmon e Seus Multisons CUT VERSION.mp3" />
     </div>
   );
 }
