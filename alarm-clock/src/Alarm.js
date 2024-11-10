@@ -58,6 +58,10 @@ function Alarm() {
     setAlarms(updatedAlarms);
   };
 
+  const handleStartAlarm = () => {
+    setAlarmStatus(true);
+  };
+
   const handleStopAlarm = () => {
     if (isAlarmActive) {
       setIsAlarmActive(false);
