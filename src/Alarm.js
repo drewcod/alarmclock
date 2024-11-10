@@ -88,30 +88,46 @@ function Alarm() {
         setSecondDeg(seconds * 6); // 6 degrees for each second
       }, 1000);
 
-      return () => clearInterval(interval); 
-    }, []);  
+      return () => clearInterval(interval); // Cleanup interval on component unmount
+    }, []); // Empty dependency array ensures it runs only once on mount
     const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
 
     return (
       <div className="clock">
+      {/* Render numbers */}
       {numbers.map((num, index) => (
         <div key={index} className="clock-number">
           {num}
         </div>
       ))}
 
-      <div className="clock-face" style={{transform: `rotate(${hourDeg}deg)`,}}>
+      {/* Hour, Minute, Second hands */}
+      <div
+        className="clock-face"
+        style={{
+          transform: `rotate(${hourDeg}deg)`,
+        }}
+      >
         <div className="hour-hand" />
       </div>
 
-      <div className="clock-face" style={{transform: `rotate(${minuteDeg}deg)`,}}>
+      <div
+        className="clock-face"
+        style={{
+          transform: `rotate(${minuteDeg}deg)`,
+        }}
+      >
         <div className="minute-hand" />
       </div>
 
-      <div className="clock-face" style={{transform: `rotate(${secondDeg}deg)`,}}>
+      <div
+        className="clock-face"
+        style={{
+          transform: `rotate(${secondDeg}deg)`,
+        }}
+      >
         <div className="second-hand" />
       </div>
-      
     </div>
     );
   };
@@ -119,7 +135,7 @@ function Alarm() {
   return (
     <div>
       <Clock />
-      <p className="currentTime">current time: {currentTime}</p>
+      <p className="currentTime">{currentTime}</p>
 
       <h1 className='title'>Rise and shine, it's a brand new day</h1>
       <div className='setAlarmParent'>
