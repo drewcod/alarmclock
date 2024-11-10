@@ -38,7 +38,6 @@ function Alarm() {
     setAlarms(updatedAlarms);
   };
 
-  // Sort alarms by time, earliest first, considering 12-hour format
   const sortedAlarms = alarms.sort((a, b) => {
     const aTime = new Date(`1970-01-01T${a.time}`);
     const bTime = new Date(`1970-01-01T${b.time}`);
@@ -52,7 +51,7 @@ function Alarm() {
       <ol>
         {sortedAlarms.map(alarm => (
           <li key={alarm.id}>
-            {alarm.time}
+            {new Date(`1970-01-01T${alarm.time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
             <button onClick={() => handleDeleteAlarm(alarm.id)}>Delete</button>
           </li>
         ))}
