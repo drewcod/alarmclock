@@ -56,8 +56,8 @@ function Alarm() {
           </li>
         ))}
       </ol>
-      <audio autoPlay>
-        <source src="alarm-sound.mp3" type="audio/mpeg" />
+      <audio id="alarmSound">
+        <source src="voicemail-13.mp3" type="audio/mpeg" />
       </audio>
     </div>
   );
