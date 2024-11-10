@@ -3,23 +3,23 @@ import React, { useState, useEffect, useRef } from 'react';
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
-  const [isAlarmActive, setIsAlarmActive] = useState(false); 
-  const audioRef = useRef(null); 
+  const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const audioRef = useRef(null);
+  const currentTimeRef = useRef(currentTime);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
+      const newTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+      setCurrentTime(newTime);
+      currentTimeRef.current = newTime;
 
       alarms.forEach(alarm => {
-        const alarmTime = new Date(`1970-01-01T${alarm.time}`);
-        const currentHour = new Date().getHours();
-        const alarmHour = alarmTime.getHours();
-        const currentAMPM = currentTime.split(' ')[1];
-        const alarmAMPM = alarm.time.split(' ')[1];
-
+        const alarmTime = alarm.time;
+        const [alarmHour, alarmMinute] = alarmTime.split(':').map(Number);
+        const [currentHour, currentMinute] = currentTimeRef.current.split(':').map(Number);
         
-        if (alarmHour === currentHour && currentAMPM === alarmAMPM && !isAlarmActive) {
-          setIsAlarmActive(true); 
+        if (alarmHour === currentHour && alarmMinute === currentMinute && !isAlarmActive) {
+          setIsAlarmActive(true);
           audioRef.current.play();
         }
       });
@@ -69,7 +69,6 @@ function Alarm() {
         ))}
       </ol>
 
-      {/* Conditionally render the Stop Alarm button if the alarm is active */}
       {isAlarmActive && (
         <div>
           <h2>Alarm Ringing!</h2>
