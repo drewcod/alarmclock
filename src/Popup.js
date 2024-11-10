@@ -3,7 +3,8 @@ import React, { useState } from "react";
 function Popup({ children, onClose }) {
     const [attempt, setAttempt] = useState("");
     const [problem, setProblem] = useState('2 + 4 * -1 * (1 / 2) = ')
-    const correctAnswer = 0;
+    // eslint-disable-next-lineconst 
+    correctAnswer = 0;
 
     const handleChange = (e) => {
         setAttempt(e.target.value);
