@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
@@ -8,12 +8,17 @@ function Alarm() {
   const currentTimeRef = useRef(currentTime);
   const audioRef = useRef(null);
 
+  const handleDeleteAlarm = useCallback((id) => {
+    const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
+    setAlarms(updatedAlarms);
+  }, [alarms]);
+  
   useEffect(() => {
     const intervalId = setInterval(() => {
       const newTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
       setCurrentTime(newTime);
       currentTimeRef.current = newTime;
-
+  
       alarms.forEach(alarm => {
         const alarmTime = alarm.compTime;
         if (alarmTime === currentTimeRef.current && !isAlarmActive) {
@@ -23,9 +28,10 @@ function Alarm() {
         }
       });
     }, 1000);
-
+  
     return () => clearInterval(intervalId);
-  }, [alarms, currentTime, isAlarmActive]);
+  }, [alarms, currentTime, isAlarmActive, handleDeleteAlarm]);
+  
 
   const handleAlarmTimeChange = (event) => {
     setAlarmTime(event.target.value); 
@@ -44,6 +50,9 @@ function Alarm() {
         }
         AMPM = 'PM';
       }
+      if (hours === '00') {
+        hours = '12';
+      }
       var goodTime = hours + ':' + mins + ':00 ' + AMPM;
       const newAlarm = {
         id: Date.now(),
@@ -53,11 +62,6 @@ function Alarm() {
       setAlarms([...alarms, newAlarm]);
       setAlarmTime("");
     }
-  };
-
-  const handleDeleteAlarm = (id) => {
-    const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
-    setAlarms(updatedAlarms);
   };
 
   const handleStopAlarm = () => {
@@ -96,7 +100,10 @@ function Alarm() {
         </div>
       )}
 
-      <audio ref={audioRef} src="Waldir Calmon e Seus Multisons CUT VERSION.mp3" />
+      {/*
+      <audio ref={audioRef} src="\voicemail-13.mp3" />
+      */}
+      <audio ref={audioRef} src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" controls style={{ display: 'none' }} />
     </div>
   );
 }
