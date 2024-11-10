@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Popup from "./Popup";
 
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
   const [isAlarmActive, setIsAlarmActive] = useState(false);
   const [alarmTime, setAlarmTime] = useState(""); 
+  const [showPopup, setShowPopup] = useState(false);
   const currentTimeRef = useRef(currentTime);
   const audioRef = useRef(null);
 
@@ -25,6 +27,7 @@ function Alarm() {
           setIsAlarmActive(true);
           handleDeleteAlarm(alarm.id);
           audioRef.current.play();
+          setShowPopup(true);
         }
       });
     }, 1000);
@@ -94,8 +97,11 @@ function Alarm() {
       </ol>
 
       {isAlarmActive && (
+        <h2>Alarm Ringing!</h2>
+      )}
+
+      {isAlarmActive && !showPopup && (
         <div>
-          <h2>Alarm Ringing!</h2>
           <button onClick={handleStopAlarm}>Stop</button>
         </div>
       )}
@@ -104,6 +110,7 @@ function Alarm() {
       <audio ref={audioRef} src="\voicemail-13.mp3" />
       */}
       <audio ref={audioRef} src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" controls style={{ display: 'none' }} />
+      {showPopup && <Popup onClose={() => setShowPopup(false)} />}
     </div>
   );
 }
