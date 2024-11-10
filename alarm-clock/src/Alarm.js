@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
+      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
 
       alarms.forEach(alarm => {
         const alarmTime = new Date(`1970-01-01T${alarm.time}`);
@@ -48,6 +48,7 @@ function Alarm() {
     <div>
       <h1>Alarm Clock</h1>
       <input type="time" onChange={handleAlarmTimeChange} />
+      <p>Current time: {currentTime}</p>
       <ol>
         {sortedAlarms.map(alarm => (
           <li key={alarm.id}>
