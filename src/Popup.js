@@ -10,7 +10,7 @@ function Popup({ children, onClose }) {
         const num1 = Math.floor(Math.random() * (999 - 103 + 1)) + 103;
         const num2 = Math.floor(Math.random() * (999 - 103 + 1)) + 103;
         setNumbers([num1, num2]);
-        setProblem(`${num1} * ${num2 + '='}`);
+        setProblem(`${num1} * ${num2 + ' = '}`);
         setCorrectAnswer(num1 * num2);
     }, []);
 
