@@ -6,6 +6,7 @@ function Alarm() {
   const [isAlarmActive, setIsAlarmActive] = useState(false);
   const [alarmTime, setAlarmTime] = useState(""); // state to hold the selected time
   const currentTimeRef = useRef(currentTime);
+  const audioRef = React.useRef(null);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -18,6 +19,7 @@ function Alarm() {
         if (alarmTime === currentTimeRef.current && !isAlarmActive) {
           setIsAlarmActive(true);
           handleDeleteAlarm(alarm.id);
+          audioRef.current.play();
         }
       });
     }, 1000);
@@ -48,8 +50,8 @@ function Alarm() {
         time: badTime,
         compTime: goodTime
       };
-      setAlarms([...alarms, newAlarm]); // add the new alarm
-      setAlarmTime(""); // reset the selected time after adding the alarm
+      setAlarms([...alarms, newAlarm]);
+      setAlarmTime("");
     }
   };
 
@@ -61,6 +63,7 @@ function Alarm() {
   const handleStopAlarm = () => {
     if (isAlarmActive) {
       setIsAlarmActive(false);
+      audioRef.current.pause();
     }
   };
 
@@ -89,6 +92,7 @@ function Alarm() {
         <div>
           <h2>Alarm Ringing!</h2>
           <button onClick={handleStopAlarm}>Stop</button>
+          <audio ref={audioRef} src="C:\Users\sokkm\Documents\SCHOOL\2024-2025\hackathonXII\Hackathon12\Waldir Calmon e Seus Multisons CUT VERSION.mp3" />
         </div>
       )}
     </div>
