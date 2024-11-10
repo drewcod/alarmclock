@@ -4,7 +4,7 @@ function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
   const [isAlarmActive, setIsAlarmActive] = useState(false);
-  const audioRef = useRef(null);
+  //const audioRef = useRef(null);
   const currentTimeRef = useRef(currentTime);
 
   useEffect(() => {
@@ -15,13 +15,14 @@ function Alarm() {
 
       alarms.forEach(alarm => {
         const alarmTime = alarm.compTime;
-        console.log({
+        /*console.log({
           alarmTime,
           currentTime: currentTimeRef.current
-        })
+        })*/
         if (alarmTime === currentTimeRef.current && !isAlarmActive) {
           setIsAlarmActive(true);
-          audioRef.current.play();
+          handleDeleteAlarm(alarm.id);
+          //audioRef.current.play();
         }
       });
     }, 1000);
@@ -57,8 +58,8 @@ function Alarm() {
 
   const handleStopAlarm = () => {
     if (isAlarmActive) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      /*audioRef.current.pause();
+      audioRef.current.currentTime = 0;*/
       setIsAlarmActive(false);
     }
   };
@@ -90,9 +91,9 @@ function Alarm() {
         </div>
       )}
 
-      <audio ref={audioRef}>
+      {/*<audio ref={audioRef}>
         <source src="voicemail-13.mp3" type="audio/mpeg" />
-      </audio>
+      </audio>*/}
     </div>
   );
 }
