@@ -14,11 +14,12 @@ function Alarm() {
       currentTimeRef.current = newTime;
 
       alarms.forEach(alarm => {
-        const alarmTime = alarm.time;
-        const [alarmHour, alarmMinute] = alarmTime.split(':').map(Number);
-        const [currentHour, currentMinute] = currentTimeRef.current.split(':').map(Number);
-        
-        if (alarmHour === currentHour && alarmMinute === currentMinute && !isAlarmActive) {
+        const alarmTime = alarm.compTime;
+        console.log({
+          alarmTime,
+          currentTime: currentTimeRef.current
+        })
+        if (alarmTime === currentTimeRef.current && !isAlarmActive) {
           setIsAlarmActive(true);
           audioRef.current.play();
         }
@@ -29,9 +30,22 @@ function Alarm() {
   }, [alarms, currentTime, isAlarmActive]);
 
   const handleAlarmTimeChange = (event) => {
+    var badTime = event.target.value;
+    var hours = badTime.slice(0, 2);
+    var mins = badTime.slice(3, 5);
+    var AMPM = 'AM';
+    if (hours > 12) {
+      hours = hours - 12;
+      if (hours < 10) {
+        hours = '0' + hours;
+      }
+      AMPM = 'PM';
+    }
+    var goodTime = hours + ':' + mins + ':00 ' + AMPM;
     const newAlarm = {
       id: Date.now(),
-      time: event.target.value
+      time: badTime,
+      compTime: goodTime
     };
     setAlarms([...alarms, newAlarm]);
   };
@@ -63,7 +77,7 @@ function Alarm() {
       <ol>
         {sortedAlarms.map(alarm => (
           <li key={alarm.id}>
-            {new Date(`1970-01-01T${alarm.time}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
+            {alarm.compTime}
             <button onClick={() => handleDeleteAlarm(alarm.id)}>Delete</button>
           </li>
         ))}
