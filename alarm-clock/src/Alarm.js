@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
+  const [isAlarmActive, setIsAlarmActive] = useState(false); 
+  const audioRef = useRef(null); 
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -15,15 +17,16 @@ function Alarm() {
         const currentAMPM = currentTime.split(' ')[1];
         const alarmAMPM = alarm.time.split(' ')[1];
 
-        if (alarmHour === currentHour && currentAMPM === alarmAMPM) {
-          const audio = document.querySelector('audio');
-          audio.play();
+        
+        if (alarmHour === currentHour && currentAMPM === alarmAMPM && !isAlarmActive) {
+          setIsAlarmActive(true); 
+          audioRef.current.play();
         }
       });
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [alarms, currentTime]);
+  }, [alarms, currentTime, isAlarmActive]);
 
   const handleAlarmTimeChange = (event) => {
     const newAlarm = {
@@ -36,6 +39,14 @@ function Alarm() {
   const handleDeleteAlarm = (id) => {
     const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
     setAlarms(updatedAlarms);
+  };
+
+  const handleStopAlarm = () => {
+    if (isAlarmActive) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsAlarmActive(false);
+    }
   };
 
   const sortedAlarms = alarms.sort((a, b) => {
@@ -57,7 +68,16 @@ function Alarm() {
           </li>
         ))}
       </ol>
-      <audio id="alarmSound">
+
+      {/* Conditionally render the Stop Alarm button if the alarm is active */}
+      {isAlarmActive && (
+        <div>
+          <h2>Alarm Ringing!</h2>
+          <button onClick={handleStopAlarm}>Stop</button>
+        </div>
+      )}
+
+      <audio ref={audioRef}>
         <source src="voicemail-13.mp3" type="audio/mpeg" />
       </audio>
     </div>
