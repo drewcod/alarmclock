@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Popup({ children, onClose }) {
     const [attempt, setAttempt] = useState("");
@@ -6,6 +7,7 @@ function Popup({ children, onClose }) {
     const [problem, setProblem] = useState("");
     const [correctAnswer, setCorrectAnswer] = useState(0);
     const audioRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const num1 = Math.floor(Math.random() * (999 - 103 + 1)) + 103;
@@ -27,7 +29,7 @@ function Popup({ children, onClose }) {
 
     const handleSubmit = () => {
         if (parseInt(attempt) === correctAnswer) {
-            window.close();
+          navigate('/');
         }
     };
 

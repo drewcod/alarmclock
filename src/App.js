@@ -7,8 +7,8 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Alarm />} />  {/* Home page */}
-                <Route path="/popup" element={<Popup />} />  {/* Popup page */}
+                <Route path="/" element={<Alarm />} />
+                <Route path="/popup" element={<Popup />} />
             </Routes>
         </Router>
     );

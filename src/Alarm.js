@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Popup from "./Popup";
 import "./App.css";
+import { useNavigate } from 'react-router-dom';
 
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
@@ -10,6 +10,7 @@ function Alarm() {
   const [hourDeg, setHourDeg] = useState(0);
   const [minuteDeg, setMinuteDeg] = useState(0);
   const [secondDeg, setSecondDeg] = useState(0);
+  const navigate = useNavigate();
 
   const handleDeleteAlarm = useCallback((id) => {
     const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
@@ -26,7 +27,7 @@ function Alarm() {
         const alarmTime = alarm.compTime;
         if (alarmTime === currentTimeRef.current) {
           handleDeleteAlarm(alarm.id);
-          window.open("/popup", "_blank");
+          navigate('/popup');
         }
       });
     }, 1000);
