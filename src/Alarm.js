@@ -4,7 +4,7 @@ import Popup from "./Popup";
 function Alarm() {
   const [alarms, setAlarms] = useState([]);
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }));
-  const [alarmTime, setAlarmTime] = useState(""); 
+  const [alarmTime, setAlarmTime] = useState("");
   const currentTimeRef = useRef(currentTime);
 
   const handleDeleteAlarm = useCallback((id) => {
@@ -22,7 +22,6 @@ function Alarm() {
         const alarmTime = alarm.compTime;
         if (alarmTime === currentTimeRef.current) {
           handleDeleteAlarm(alarm.id);
-          window.open("/popup", "_blank");
         }
       });
     }, 1000);
