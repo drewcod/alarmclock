@@ -4,6 +4,7 @@ function Alarm() {
   const [alarmTime, setAlarmTime] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
   const [alarmStatus, setAlarmStatus] = useState(false);
+  const [alarms, setAlarms] = useState([null]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -19,6 +20,7 @@ function Alarm() {
 
   const handleAlarmTimeChange = (event) => {
     setAlarmTime(event.target.value);
+    setAlarms([...alarms, event.target.value]);
   };
 
   const handleStopAlarm = () => {
@@ -38,6 +40,11 @@ function Alarm() {
           <button onClick={handleStopAlarm}>Stop Alarm</button>
         </div>
       )}
+      <ul>
+        {alarms.map((a, index) => (
+          <li key={index}>{a}</li>
+        ))}
+      </ul>
     </div>
   );
 }
