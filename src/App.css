@@ -18,8 +18,8 @@ body {
 
 .currentTime{
   text-align: center;
-  margin-left: 40%;
-  margin-top: -1%;
+  margin-left: 60%;
+  margin-top: -2%;
 }
 
 button, input {
@@ -51,9 +51,8 @@ li {
   transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Hover effect for the list items */
 li:hover, button:hover {
-  background-color: #d4e7f7; /* Light blue background when hovered */
+  background-color: #d4e7f7; 
 }
 
 .App-logo {
@@ -117,15 +116,13 @@ li:hover, button:hover {
   padding: 20px;
   border-radius: 5px;
 }
-/* Center the clock on the page */
 
-/* Clock container */
 .clock {
   position: relative;
-  width: 200px;  /* Clock size */
-  height: 200px; /* Clock size */
-  border: 10px solid black; /* Clock border */
-  border-radius: 50%; /* Make it round */
+  width: 200px;  
+  height: 200px; 
+  border: 10px solid black; 
+  border-radius: 50%; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -133,7 +130,7 @@ li:hover, button:hover {
   left: 30%;
 }
 
-/* Clock hands and rotation */
+
 .clock-face {
   position: absolute;
   width: 100%;
@@ -141,37 +138,36 @@ li:hover, button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  transform-origin: center; /* Center of the clock */
+  transform-origin: center; 
 }
 
 .hour-hand,
 .minute-hand,
 .second-hand {
   position: absolute;
-  width: 6px;  /* Thickness of hands */
-  background-color: black; /* Color of the hands */
-  transform-origin: 50% 100%; /* Rotation around their own edges */
-  top: 50%; /* Center them at the middle */
-  left: 50%; /* Center them at the middle */
-  transform: translate(-50%, -100%); /* Adjust to ensure hands rotate from their base */
+  width: 6px;  
+  background-color: black; 
+  transform-origin: 50% 100%; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -100%); 
 }
 
 .hour-hand {
-  height: 30%; /* Shorter hand */
-  background-color: #333; /* Darker color for the hour hand */
+  height: 30%;
+  background-color: #333; 
 }
 
 .minute-hand {
-  height: 40%; /* Longer hand */
-  background-color: blue; /* Blue color for the minute hand */
+  height: 40%; 
+  background-color: blue; 
 }
 
 .second-hand {
-  height: 45%; /* Longest hand */
-  background-color: red; /* Red color for the second hand */
+  height: 45%; 
+  background-color: red; 
 }
 
-/* Add the numbers around the clock */
 .clock-number {
   position: absolute;
   font-size: 18px;
