@@ -22,6 +22,7 @@ function Alarm() {
         const alarmTime = alarm.compTime;
         if (alarmTime === currentTimeRef.current) {
           handleDeleteAlarm(alarm.id);
+          window.open("/popup", "_blank");
         }
       });
     }, 1000);
