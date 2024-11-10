@@ -1,50 +1,53 @@
 import React, { useState, useEffect } from 'react';
 
 function Alarm() {
-  const [alarmTime, setAlarmTime] = useState('');
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-  const [alarmStatus, setAlarmStatus] = useState(false);
   const [alarms, setAlarms] = useState([]);
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
 
-      if (alarmTime && alarmTime === currentTime) {
-        setAlarmStatus(true);
-      }
+      alarms.forEach(alarm => {
+        if (alarm.time === currentTime) {
+          // Play alarm sound
+          const audio = document.querySelector('audio');
+          audio.play();
+        }
+      });
     }, 1000);
 
     return () => clearInterval(intervalId);
-  }, [alarmTime, currentTime]);
+  }, [alarms, currentTime]);
 
   const handleAlarmTimeChange = (event) => {
-    setAlarmTime(event.target.value);
-    setAlarms([...alarms, event.target.value]);
+    const newAlarm = {
+      id: Date.now(),
+      time: event.target.value
+    };
+    setAlarms([...alarms, newAlarm]);
   };
 
-  const handleStopAlarm = () => {
-    setAlarmStatus(false);
+  const handleDeleteAlarm = (id) => {
+    const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
+    setAlarms(updatedAlarms);
   };
 
   return (
     <div>
       <h1>Alarm Clock</h1>
-      <input type="time" value={alarmTime} onChange={handleAlarmTimeChange} />
-      <p>Current time: {currentTime}</p>
-      {alarmStatus && (
-        <div>
-          <audio autoPlay>
-            <source src="alarm-sound.mp3" type="audio/mpeg" />
-          </audio>
-          <button onClick={handleStopAlarm}>Stop Alarm</button>
-        </div>
-      )}
+      <input type="time" onChange={handleAlarmTimeChange} />
       <ul>
-        {alarms.map((a, index) => (
-          <li key={index}>{a}</li>
+        {alarms.map(alarm => (
+          <li key={alarm.id}>
+            {alarm.time}
+            <button onClick={() => handleDeleteAlarm(alarm.id)}>Delete</button>
+          </li>
         ))}
       </ul>
+      <audio autoPlay>
+        <source src="alarm-sound.mp3" type="audio/mpeg" />
+      </audio>
     </div>
   );
 }
