@@ -29,7 +29,7 @@ function Popup({ children, onClose }) {
 
     const handleSubmit = () => {
         if (parseInt(attempt) === correctAnswer) {
-          navigate('/');
+          navigate('/alarmclock');
         }
     };
 

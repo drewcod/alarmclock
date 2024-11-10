@@ -7,7 +7,7 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Alarm />} />
+                <Route path="/alarmclock" element={<Alarm />} />
                 <Route path="/popup" element={<Popup />} />
             </Routes>
         </Router>
