@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { GoogleGenerativeAI } from '@google/generative-AI';
+import React, { useState, useEffect, useCallback } from "react";
+import * as GoogleGenerativeAI from '@google/generative-ai';
 const WolframAlphaAPI = require('wolfram-alpha-api');
+
+
+const model = new GoogleGenerativeAI({ apiKey: process.env.REACT_APP_GEMINI_API_KEY });
+const waApi = WolframAlphaAPI(process.env.REACT_APP_WA_API_KEY); 
 
 function Popup({ children, onClose }) {
   const [isLoading, setIsLoading] = useState(true);
   const [problem, setProblem] = useState(null);
   const [correctAnswer, setCorrectAnswer] = useState(null);
   const [attempt, setAttempt] = useState("");
-  const model = new GoogleGenerativeAI({ apiKey: process.env.REACT_APP_GEMINI_API_KEY });
-  const waApi = WolframAlphaAPI('EXYQVE-AWYTW7QVLP');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,8 +18,9 @@ function Popup({ children, onClose }) {
         setIsLoading(true);
         const newProblem = await model.generateText('generate a calculus problem for wolfram alpha api to solve');
         setProblem(newProblem);
+        
         const wolframAnswer = await waApi.getShort(newProblem);
-        setCorrectAnswer(wolframAnswer);
+        setCorrectAnswer(parseFloat(wolframAnswer));
       } catch (error) {
         console.error("Error fetching data:", error);
         alert("An error occurred. Please try again later.");
@@ -28,14 +31,14 @@ function Popup({ children, onClose }) {
     };
 
     fetchData();
-  }, []);
+  }, [onClose]);
 
   const handleChange = (e) => {
     setAttempt(e.target.value);
   };
 
   const handleSubmit = () => {
-    if (parseInt(attempt) === correctAnswer) {
+    if (parseFloat(attempt) === correctAnswer) {
       onClose();
     }
   };
@@ -53,12 +56,12 @@ function Popup({ children, onClose }) {
               value={attempt}
               onChange={handleChange}
               placeholder="Enter your answer"
-              disabled={isLoading} // Disable button while loading
+              disabled={isLoading} 
             />
             <button onClick={handleSubmit} disabled={isLoading}>
               Submit
             </button>
-            {attempt && parseInt(attempt) !== correctAnswer && (
+            {attempt && parseFloat(attempt) !== correctAnswer && (
               <p>Wrong Answer!</p>
             )}
           </>

@@ -9,18 +9,24 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@wolfram-alpha/wolfram-alpha-api": "^23.1004.144821-RELEASE",
+    "buffer": "^6.0.3",
+    "domain-browser": "^5.7.0",
+    "https-browserify": "^1.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-mobile-picker": "^1.0.1",
-    "react-scripts": "^3.4.4",
-    "web-vitals": "^2.1.4"
+    "react-scripts": "^5.0.1",
+    "stream-browserify": "^3.0.0",
+    "web-vitals": "^2.1.4",
+    "webpack": "^5.96.1",
+    "wolfram-alpha-api": "^0.2.1"
   },
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,6 +48,14 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.2.0"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "browserify-fs": "^1.0.0",
+    "gh-pages": "^6.2.0",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "react-app-rewired": "^2.2.1",
+    "stream-http": "^3.2.0",
+    "url": "^0.11.4",
+    "util": "^0.12.5"
   }
 }
