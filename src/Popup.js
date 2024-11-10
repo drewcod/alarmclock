@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Popup({ children, onClose }) {
     const [attempt, setAttempt] = useState("");
-    const[numbers, setNumbers] = useState([]);
+    const [numbers, setNumbers] = useState([]);
+    const [problem, setProblem] = useState("");
+    const [correctAnswer, setCorrectAnswer] = useState(0);
 
-    setNumbers(() => {
-      var num1 = Math.random(103, 999);
-      var num2 = Math.random(103, 999);
-      return [num1, num2];
-    });
-
-    const [problem, setProblem] = useState(numbers[0] + ' * ' + numbers[1]);
-    const correctAnswer = numbers[0] * numbers[1];
+    useEffect(() => {
+        const num1 = Math.floor(Math.random() * (999 - 103 + 1)) + 103;
+        const num2 = Math.floor(Math.random() * (999 - 103 + 1)) + 103;
+        setNumbers([num1, num2]);
+        setProblem(`${num1} * ${num2 + '='}`);
+        setCorrectAnswer(num1 * num2);
+    }, []);
 
     const handleChange = (e) => {
         setAttempt(e.target.value);
@@ -31,7 +32,7 @@ function Popup({ children, onClose }) {
                     type="number"
                     value={attempt}
                     onChange={handleChange}
-                    placeHolder="Enter your answer"    
+                    placeholder="Enter your answer"    
                 />
                 <button onClick={handleSubmit}>Submit</button>
                 {attempt && parseInt(attempt) !== correctAnswer && <p>Wrong Answer!</p>}
