@@ -16,13 +16,13 @@ function Alarm() {
     const updatedAlarms = alarms.filter(alarm => alarm.id !== id);
     setAlarms(updatedAlarms);
   }, [alarms]);
-  
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const newTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
       setCurrentTime(newTime);
       currentTimeRef.current = newTime;
-  
+
       alarms.forEach(alarm => {
         const alarmTime = alarm.compTime;
         if (alarmTime === currentTimeRef.current) {
@@ -31,10 +31,9 @@ function Alarm() {
         }
       });
     }, 1000);
-  
+
     return () => clearInterval(intervalId);
   }, [alarms, currentTime, handleDeleteAlarm]);
-  
 
   const handleAlarmTimeChange = (event) => {
     setAlarmTime(event.target.value); 
@@ -42,26 +41,45 @@ function Alarm() {
 
   const handleAddAlarm = () => {
     if (alarmTime) {
-      var badTime = alarmTime;
-      var hours = badTime.slice(0, 2);
-      var mins = badTime.slice(3, 5);
-      var AMPM = 'AM';
+      let badTime = alarmTime;
+      let hours = badTime.slice(0, 2);
+      let mins = badTime.slice(3, 5);
+      let AMPM = 'AM';
       if (hours > 12) {
         hours = hours - 12;
         if (hours < 10) {
           hours = '0' + hours;
         }
         AMPM = 'PM';
-      }
+      } 
       if (hours === '00') {
         hours = '12';
-      }
-      var goodTime = hours + ':' + mins + ':00 ' + AMPM;
+      } 
+      if (hours === '12') {
+        hours = '12';
+        AMPM = 'PM';
+      } 
+      let goodTime = hours + ':' + mins + ':00 ' + AMPM;
+      
+      // Calculate sleep duration
+      const alarmDate = new Date();
+      alarmDate.setHours(badTime.slice(0, 2));
+      alarmDate.setMinutes(badTime.slice(3, 5));
+      alarmDate.setSeconds(0);
+
+      const now = new Date();
+      const sleepDurationMs = alarmDate.getTime() - now.getTime();
+      const sleepHours = Math.floor(sleepDurationMs / (1000 * 60 * 60));
+      const sleepMinutes = Math.floor((sleepDurationMs % (1000 * 60 * 60)) / (1000 * 60));
+      const sleepString = sleepDurationMs > 0 ? `${sleepHours}h ${sleepMinutes}m` : "Alarm time has passed";
+
       const newAlarm = {
         id: Date.now(),
         time: badTime,
-        compTime: goodTime
+        compTime: goodTime,
+        sleepDuration: sleepString,
       };
+
       setAlarms([...alarms, newAlarm]);
       setAlarmTime("");
     }
@@ -90,45 +108,46 @@ function Alarm() {
 
       return () => clearInterval(interval); // Cleanup interval on component unmount
     }, []); // Empty dependency array ensures it runs only once on mount
+
     const numbers = Array.from({ length: 12 }, (_, i) => i + 1);
 
     return (
       <div className="clock">
-      {/* Render numbers */}
-      {numbers.map((num, index) => (
-        <div key={index} className="clock-number">
-          {num}
+        {/* Render numbers */}
+        {numbers.map((num, index) => (
+          <div key={index} className="clock-number">
+            {num}
+          </div>
+        ))}
+
+        {/* Hour, Minute, Second hands */}
+        <div
+          className="clock-face"
+          style={{
+            transform: `rotate(${hourDeg}deg)`,
+          }}
+        >
+          <div className="hour-hand" />
         </div>
-      ))}
 
-      {/* Hour, Minute, Second hands */}
-      <div
-        className="clock-face"
-        style={{
-          transform: `rotate(${hourDeg}deg)`,
-        }}
-      >
-        <div className="hour-hand" />
-      </div>
+        <div
+          className="clock-face"
+          style={{
+            transform: `rotate(${minuteDeg}deg)`,
+          }}
+        >
+          <div className="minute-hand" />
+        </div>
 
-      <div
-        className="clock-face"
-        style={{
-          transform: `rotate(${minuteDeg}deg)`,
-        }}
-      >
-        <div className="minute-hand" />
+        <div
+          className="clock-face"
+          style={{
+            transform: `rotate(${secondDeg}deg)`,
+          }}
+        >
+          <div className="second-hand" />
+        </div>
       </div>
-
-      <div
-        className="clock-face"
-        style={{
-          transform: `rotate(${secondDeg}deg)`,
-        }}
-      >
-        <div className="second-hand" />
-      </div>
-    </div>
     );
   };
 
@@ -147,6 +166,7 @@ function Alarm() {
           <li key={alarm.id}>
             {alarm.compTime}
             <button onClick={() => handleDeleteAlarm(alarm.id)}>Delete</button>
+            <div>Amount of Sleep: {alarm.sleepDuration}</div>
           </li>
         ))}
       </ol>

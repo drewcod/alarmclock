@@ -45,6 +45,7 @@ function AlarmApp() {
         const alarmDate = new Date(now.getTime() + 5000);
         setAlarmTime(alarmDate);
         console.log(`Alarm set for: ${alarmDate}`);
+        
     };
 
     return (
